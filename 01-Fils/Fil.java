@@ -3,12 +3,13 @@ public class Fil extends Thread {
     public Fil(String nom) {
         nombre = nom; //asignamos nombre
     }
-    @Override //vamos a modificar metodos de clase 
+
+    @Override //vamos a modificar metodos de clase segun el funcionamiento que queramos 
     public void run() {
         for (int i = 1; i <= 9; i++) {
             System.out.println(nombre + " " + i); //itera
             try {
-                Thread.sleep((int) (Math.random() * 200)); //pausa 
+                Thread.sleep((i+1)); //pausa para los dos para que itere uno y otro
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
