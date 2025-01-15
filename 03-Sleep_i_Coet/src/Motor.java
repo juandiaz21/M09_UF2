@@ -1,40 +1,44 @@
 import java.util.Random;
-
-class Motor extends Thread {
+public class Motor implements Runnable {
+    // variables de classe
+    private int id;
     private int potenciaActual;
     private int potenciaObjectiu;
-    private int id;
-    private Random random;
 
     public Motor(int id) {
+        this.id = id;
         this.potenciaActual = 0;
         this.potenciaObjectiu = 0;
-        this.id = id;
-        this.random = new Random();
     }
 
-    public void setPotencia(int p) {
-        this.potenciaObjectiu = p;
+    public int getPotenciaObjectiu() {
+        return this.potenciaObjectiu;
+    }
+
+    public void setPotencia(int potencia) {
+        this.potenciaObjectiu = potencia;
     }
 
     @Override
     public void run() {
-        while (true) {
-            if (potenciaActual < potenciaObjectiu) {
-                potenciaActual++;
-                System.out.println("Motor " + id + ": Incre. Objectiu: " + potenciaObjectiu + " Actual: " + potenciaActual);
-            } else if (potenciaActual > potenciaObjectiu) {
-                potenciaActual--;
-                System.out.println("Motor " + id + ": Decre. Objectiu: " + potenciaObjectiu + " Actual: " + potenciaActual);
-            } else if (potenciaObjectiu == 0 && potenciaActual == 0) {
-                System.out.println("Motor " + id + ": FerRes Objectiu: " + potenciaObjectiu + " Actual: " + potenciaActual);
-                break;
-            }
-
-            try {
-                Thread.sleep(random.nextInt(2000)); // Temps aleatori entre 0 i 2 segons
-            } catch (InterruptedException e) {
-                System.out.println("Motor " + id + " interromput.");
+        if (this.potenciaActual != this.potenciaObjectiu) {
+            String operacio = (this.potenciaObjectiu > this.potenciaActual) ? "Incre." : "Decre.";
+            while (this.potenciaActual != this.potenciaObjectiu) {
+                try {
+                    Thread.sleep(new Random().nextInt(2001)); // Aleatori entre 0 y 2s
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (this.potenciaObjectiu > this.potenciaActual) {
+                    this.potenciaActual++;
+                } else {
+                    this.potenciaActual--;
+                }
+                if (this.potenciaActual == this.potenciaObjectiu) {
+                    System.out.printf("Motor %d: FerRes Objectiu: %d Actual: %d%n", this.id, this.potenciaObjectiu, this.potenciaActual);
+                    break;
+                }
+                System.out.printf("Motor %d: %s Objectiu: %d Actual: %d%n", this.id, operacio, this.potenciaObjectiu, this.potenciaActual);
             }
         }
     }
