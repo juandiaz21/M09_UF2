@@ -17,24 +17,30 @@ public class Coet {
         for (int i = 0; i < 4; i++) {
             motors[i].setPotencia(p);
         }
+
         Thread[] threads = new Thread[4];
         for (int i = 0; i < 4; i++) {
             threads[i] = new Thread(motors[i]);
-            threads[i].start(); 
+            threads[i].start();
         }
-        try {
+        
+        boolean threadsRunning = true;
+        while (threadsRunning) {
+            threadsRunning = false;
             for (Thread thread : threads) {
-                thread.join();
+                if (thread.isAlive()) {
+                    threadsRunning = true;
+                }
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
+
     public void arrancar() {
         for (int i = 0; i < 4; i++) {
             motors[i].setPotencia(motors[i].getPotenciaObjectiu());
         }
     }
+
     public static void main(String[] args) {
         Scanner lector = new Scanner(System.in);
         Coet cohete = new Coet();
