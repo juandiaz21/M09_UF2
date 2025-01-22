@@ -3,19 +3,18 @@ public class Compte {
     private float saldo;
     private static Compte id;
 
-    public float getSaldo() {
+    public synchronized float getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(float entrada) {
+    public synchronized void setSaldo(float entrada) {
         this.saldo = saldo - entrada;
     }
 
-    public static Compte getInstance() {
+    public static synchronized Compte getInstance() {
         if (id == null) {
             id = new Compte();
         }
         return id;
     }
-
 }

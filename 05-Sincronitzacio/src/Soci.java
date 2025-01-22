@@ -22,10 +22,12 @@ public class Soci implements Runnable{
         
         for (int i = 0; i<maxAnys; i++){
             for (int j = 1; j<=12 ; j++){
-                if (j%2 == 0){
-                    compte.setSaldo(aportacio);
-                }else{
-                    compte.setSaldo(-aportacio);
+                synchronized(compte){
+                    if (j%2 == 0){
+                        compte.setSaldo(aportacio);
+                    }else{
+                        compte.setSaldo(-aportacio);
+                    }
                 }
                 try{
                     Thread.sleep(rnd.nextInt(esperaMax));
@@ -33,7 +35,6 @@ public class Soci implements Runnable{
                     Thread.currentThread().interrupt();
                 }
             }
-        }
-        
+        } 
     }
 }
