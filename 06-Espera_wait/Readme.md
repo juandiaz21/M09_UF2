@@ -38,7 +38,7 @@ Assistent 8 no ha pogut cancel·lar una reserva inexistent. Places disponibles: 
 - En cas de que fos 30-70 (a favor de cancel·lar):
 
 ````java
-if (random.nextInt(100)<70) {
+if (random.nextInt(100)<30) {
     esdeveniment.ferReserva(this);
 } else {
     esdeveniment.cancelaReserva(this);
