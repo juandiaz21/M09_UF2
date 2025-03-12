@@ -8,9 +8,9 @@ public class Estanc {
     private final Random random = new Random();
 
     public synchronized void nouSubministrament() {
-        if (tancat) return;
+        if (tancat) return; 
 
-        int producte = random.nextInt(3);
+        int producte = random.nextInt(3); 
         switch (producte) {
             case 0:
                 addTabac();
@@ -22,7 +22,7 @@ public class Estanc {
                 addLlumi();
                 break;
         }
-        notifyAll();
+        notifyAll(); 
     }
 
     public synchronized void addTabac() {
@@ -66,7 +66,7 @@ public class Estanc {
 
     public synchronized void tancarEstanc() {
         tancat = true;
-        notifyAll();
+        notifyAll(); 
         System.out.println("Estanc tancat");
     }
 
@@ -74,11 +74,11 @@ public class Estanc {
         System.out.println("Estanc obert");
         while (!tancat) {
             try {
-                Thread.sleep(500 + random.nextInt(1000)); // Espera entre 0,5 y 1,5s
+                Thread.sleep(500 + random.nextInt(1000)); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            nouSubministrament();
+            nouSubministrament(); 
         }
     }
 }

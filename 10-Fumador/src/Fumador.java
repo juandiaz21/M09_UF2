@@ -3,6 +3,9 @@ import java.util.Random;
 public class Fumador implements Runnable {
     private final Estanc estanc;
     private final int id;
+    private Tabac tabac;
+    private Paper paper;
+    private Llumi llumi;
     private int fumades = 0;
     private final Random random = new Random();
 
@@ -13,52 +16,70 @@ public class Fumador implements Runnable {
 
     private void comprarTabac() {
         synchronized (estanc) {
-            while (!estanc.venTabac()) {
-                try {
-                    estanc.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            while (tabac == null) {
+                if (estanc.venTabac()) {
+                    tabac = new Tabac();  
+                    System.out.println("Fumador " + id + " comprant Tabac");
+                } else {
+                    try {
+                        estanc.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            System.out.println("Fumador " + id + " comprant Tabac");
             estanc.notifyAll();
         }
     }
 
     private void comprarPaper() {
         synchronized (estanc) {
-            while (!estanc.venPaper()) {
-                try {
-                    estanc.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            while (paper == null) {
+                if (estanc.venPaper()) {
+                    paper = new Paper();  
+                    System.out.println("Fumador " + id + " comprant Paper");
+                } else {
+                    try {
+                        estanc.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            System.out.println("Fumador " + id + " comprant Paper");
             estanc.notifyAll();
         }
     }
 
     private void comprarLlumi() {
         synchronized (estanc) {
-            while (!estanc.venLlumi()) {
-                try {
-                    estanc.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            while (llumi == null) {
+                if (estanc.venLlumi()) {
+                    llumi = new Llumi(); 
+                    System.out.println("Fumador " + id + " comprant Llumí");
+                } else {
+                    try {
+                        estanc.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            System.out.println("Fumador " + id + " comprant Llumí");
             estanc.notifyAll();
         }
     }
 
     private void fumar() {
         try {
-            System.out.println("Fumador " + id + " fumant");
-            Thread.sleep(500 + random.nextInt(500)); // Fumar entre 0,5 y 1s
-            fumades++;
-            System.out.println("Fumador " + id + " ha fumat " + fumades + " vegades");
+            if (tabac != null && paper != null && llumi != null) {
+                System.out.println("Fumador " + id + " fumant");
+                Thread.sleep(500 + random.nextInt(500)); 
+                fumades++;
+                System.out.println("Fumador " + id + " ha fumat " + fumades + " vegades");
+
+                tabac = null;
+                paper = null;
+                llumi = null;
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
